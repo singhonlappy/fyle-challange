@@ -1,7 +1,44 @@
-<div class="h-screen flex items-start justify-center">
-  <div class="flex flex-col w-full max-w-md bg-black p-6 rounded-lg shadow-lg">
-    <h5 class="font-bold text-2xl text-white">Enter name:</h5>
-    <input type="text" class="border border-gray-300 rounded h-10 px-3 text-black mb-4" placeholder="Enter Here" [(ngModel)]="githubUsername"(keyup.enter)="onsubmit()">
-    <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" (click)="onsubmit()">Submit</button>
+<div class="h-screen flex items-start justify-center bg-gradient-to-br from-purple-700 to-blue-500">
+  <div class="flex flex-col w-full max-w-md bg-white p-6 rounded-lg shadow-lg">
+    <h5 class="font-bold text-3xl text-gray-800 mb-4">Enter name:</h5>
+    <input type="text"
+      class="border border-gray-300 rounded h-12 px-4 text-gray-800 mb-4 focus:outline-none focus:border-blue-500"
+      placeholder="Enter Here" [(ngModel)]="user" (keyup.enter)="onSubmit()">
+    <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md"
+      (click)="onSubmit()">Submit</button>
   </div>
+</div>
+
+<!-- Displaying the user information and repos -->
+
+<div class="information w-full flex-col bg-white rounded-lg shadow-lg mt-8 p-8">
+  <div class="info-1 flex flex-col gap-10 w-full">
+    <div class="info-1-p1 flex gap-8 items-center">
+      <div class="user-image w-20 h-20 rounded-full overflow-hidden">
+        <img *ngIf="userdetail?.avatar_url" [src]="userdetail.avatar_url" alt="Avatar">
+      </div>
+      <div class="user-info">
+        <p class="text-2xl font-bold text-gray-800">{{userdetail.name}}</p>
+        <p class="text-lg text-gray-600">{{userdetail.bio}}</p>
+        <p class="text-lg text-gray-600">{{userdetail.location}}</p>
+        <p class="text-lg text-gray-600">{{userdetail.twitter_username}}</p>
+      </div>
+    </div>
+    <div class="info-1-p2 w-full">
+      <p class="text-lg text-gray-600">Profile URL: <a href="{{userdetail.url}}" target="_blank"
+          class="text-blue-500">{{userdetail.url}}</a></p>
+    </div>
+  </div>
+  <div class="info-2 mt-8">
+    <h5 class="text-3xl font-bold text-gray-800 mb-4">Repositories</h5>
+    <div *ngFor="let repo of userrepo" class="repo bg-gray-100 rounded-lg p-4 mb-4">
+      <p class="text-xl font-bold text-gray-800">{{ repo.name }}</p>
+      <p class="text-lg text-gray-600 mb-2">{{ repo.description }}</p>
+      <p class="text-lg text-gray-600">
+        <span *ngFor="let language of repo?.languages_url ? userrepolanguages[repo.languages_url] : []" class="bg-blue-500 text-white px-2 py-1 rounded mr-2">{{ language }}</span>
+
+      </p>
+    </div>
+  </div>
+  
 </div>
