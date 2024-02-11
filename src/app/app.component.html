@@ -1,6 +1,6 @@
-<div class="h-screen flex items-start justify-center bg-gradient-to-br from-purple-700 to-blue-500">
+<div class=" py-10 flex items-start justify-center bg-gradient-to-br from-purple-700 to-blue-500">
   <div class="flex flex-col w-full max-w-md bg-white p-6 rounded-lg shadow-lg">
-    <h5 class="font-bold text-3xl text-gray-800 mb-4">Enter name:</h5>
+    <h5 class="font-bold text-3xl text-gray-800 mb-4">Enter Github username:</h5>
     <input type="text"
       class="border border-gray-300 rounded h-12 px-4 text-gray-800 mb-4 focus:outline-none focus:border-blue-500"
       placeholder="Enter Here" [(ngModel)]="user" (keyup.enter)="onSubmit()">
@@ -25,20 +25,72 @@
       </div>
     </div>
     <div class="info-1-p2 w-full">
-      <p class="text-lg text-gray-600">Profile URL: <a href="{{userdetail.url}}" target="_blank"
+      <p class="text-lg text-gray-600"><a href="{{userdetail.url}}" target="_blank"
           class="text-blue-500">{{userdetail.url}}</a></p>
     </div>
   </div>
-  <div class="info-2 mt-8">
-    <h5 class="text-3xl font-bold text-gray-800 mb-4">Repositories</h5>
-    <div *ngFor="let repo of userrepo" class="repo bg-gray-100 rounded-lg p-4 mb-4">
-      <p class="text-xl font-bold text-gray-800">{{ repo.name }}</p>
-      <p class="text-lg text-gray-600 mb-2">{{ repo.description }}</p>
-      <p class="text-lg text-gray-600">
-        <span *ngFor="let language of repo?.languages_url ? userrepolanguages[repo.languages_url] : []" class="bg-blue-500 text-white px-2 py-1 rounded mr-2">{{ language }}</span>
 
-      </p>
-    </div>
+
+
+
+  <div class="info-2 mt-8 grid grid-cols-2 gap-4">
+    <ng-container *ngFor="let repo of userrepo">
+      <div class="repo-column flex flex-col bg-gray-100 rounded-lg p-4">
+        <div class="repo mb-4">
+          <p class="text-xl font-bold text-gray-800">{{ repo.name }}</p>
+          <p class="text-lg text-gray-600 mb-2">{{ repo.description }}</p>
+          <p>
+            <span *ngIf="repo.languages">
+              <span *ngFor="let key of getKeys(repo.languages); let i = index" 
+                    [ngStyle]="{ 
+                      'background-color': '#6cb2eb',
+                      'color': 'white',
+                      'padding': '5px',
+                      'border-radius': '5px',
+                      'box-shadow': '2px 2px 5px rgba(0, 0, 0, 0.2)',
+                      'margin-right': i !== getKeys(repo.languages).length - 1 ? '5px' : '0'
+                    }">
+                {{ key }}
+              </span>
+            </span>
+          </p>
+        </div>
+      </div>
+    </ng-container>
   </div>
+
+
+
+  <div>
+    <!-- Previous Page Button -->
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+    
+    <!-- Page Numbers -->
+    <div *ngFor="let page of totalPages">
+      <button (click)="goToPage(page)" [disabled]="currentPage === page">{{ page }}</button>
+    </div>
+    
+    <!-- Next Page Button -->
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages.length">Next</button>
+  </div>
+  
+
+    <!-- Button to control the repos -->
+    <!-- Add a select dropdown to choose items per page -->
+<!-- Add a select dropdown to choose items per page -->
+<select [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+  <option value="5" class="py-1">5 Repositories Per Page</option>
+  <option value="10" class="py-1">10 Repositories Per Page</option>
+  <option value="20" class="py-1">20 Repositories Per Page</option>
+</select>
+
+
+
+    
+    
+
+  
+  
+  
   
 </div>
