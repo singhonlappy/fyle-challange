@@ -34,7 +34,7 @@
 
 
   <div class="info-2 mt-8 grid grid-cols-2 gap-4">
-    <ng-container *ngFor="let repo of userrepo">
+    <ng-container *ngFor="let repo of userrepo1">
       <div class="repo-column flex flex-col bg-gray-100 rounded-lg p-4">
         <div class="repo mb-4">
           <p class="text-xl font-bold text-gray-800">{{ repo.name }}</p>
@@ -79,18 +79,17 @@
     <!-- Add a select dropdown to choose items per page -->
 <!-- Add a select dropdown to choose items per page -->
 <select [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-  <option value="5" class="py-1">5 Repositories Per Page</option>
+  
   <option value="10" class="py-1">10 Repositories Per Page</option>
   <option value="20" class="py-1">20 Repositories Per Page</option>
-</select>
-
-
-
-    
-    
-
-  
-  
-  
+  <option value="30" class="py-1">30 Repositories Per Page</option>
+  <option value="40" class="py-1">40 Repositories Per Page</option>
+  <option value="50" class="py-1">50 Repositories Per Page</option>
+  <option value="60" class="py-1">60 Repositories Per Page</option>
+  <option value="70" class="py-1">70 Repositories Per Page</option>
+  <option value="80" class="py-1">80 Repositories Per Page</option>
+  <option value="90" class="py-1">90 Repositories Per Page</option>
+  <option value="100" class="py-1">100 Repositories Per Page</option>
+</select>  
   
 </div>

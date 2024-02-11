@@ -22,6 +22,11 @@ export class ApiService {
 
     return this.httpClient.get(`https://api.github.com/users/${githubUsername}/repos`, { params });
   }
+  getUserRepo1(githubUsername: string): Observable<any> { 
+
+    return this.httpClient.get(`https://api.github.com/users/${githubUsername}/repos`);
+  }
+
   getLanguagesForRepo(languagesUrl: string): Observable<any> {
     return this.httpClient.get(languagesUrl);
   }

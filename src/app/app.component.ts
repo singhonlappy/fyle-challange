@@ -17,6 +17,12 @@ interface UserRepo {
   languages_url: string;
   languages: string;
 }
+interface UserRepo1 {
+  name: string;
+  description: string;
+  languages_url: string;
+  languages: string;
+}
 
 @Component({
   selector: 'app-root',
@@ -36,14 +42,15 @@ export class AppComponent {
     url: '',
   };
   userrepo: UserRepo[] = [];
+  userrepo1: UserRepo1[] = [];
   currentPage: number = 1;
   itemsPerPage: number = 10;
   totalPages: number[] = [];
-  
+
   // Add the method to handle change in items per page
   onItemsPerPageChange() {
     // When the user changes the items per page, reset currentPage to 1
-    this.currentPage = 1;
+
     // Fetch repositories with the updated items per page
     this.fetchUserRepos();
   }
@@ -51,21 +58,22 @@ export class AppComponent {
   getKeys(obj: any): string[] {
     return Object.keys(obj);
   }
-// Calculate total pages
-calculateTotalPages(totalItems: number, itemsPerPage: number): void {
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  this.totalPages = Array(totalPages).fill(0).map((_, index) => index + 1);
-  console.log("totalpages" ,totalPages)
-}
-
-  
-// Fetch repositories for the selected page
-goToPage(page: number): void {
-  if (page >= 1 && page <= this.totalPages.length) {
-    this.currentPage = page;
-    this.fetchUserRepos(); // Call method to fetch repositories for the selected page
+  // Calculate total pages
+  calculateTotalPages(totalItems: number, itemsPerPage: number): void {
+    const totalPages = totalItems <= itemsPerPage ? 1 : Math.ceil(totalItems / itemsPerPage);
+    this.totalPages = Array(totalPages).fill(0).map((_, index) => index + 1);
+    
   }
-}
+
+
+
+  // Fetch repositories for the selected page
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages.length) {
+      this.currentPage = page;
+      this.fetchUserRepos(); // Call method to fetch repositories for the selected page
+    }
+  }
 
 
   onSubmit() {
@@ -73,7 +81,7 @@ goToPage(page: number): void {
     this.itemsPerPage = 10;
     this.apiService.getUser(this.user).subscribe((data: UserDetail | any) => {
       this.userdetail = data;
-      console.log('User Detail:', this.userdetail);
+      
       this.storeData('userDetail', this.userdetail); // Store user detail in local storage
     });
 
@@ -82,46 +90,63 @@ goToPage(page: number): void {
 
 
   fetchUserRepos() {
-    this.apiService.getUserRepo(this.user, this.currentPage, this.itemsPerPage)
+    this.apiService.getUserRepo1(this.user)
       .subscribe((data: UserRepo[] | any) => {
         this.userrepo = data;
-        console.log('User Repos:', this.userrepo);
-        this.storeData('userRepo', this.userrepo); // Store user repos in local storage
         
+        this.storeData('userRepo', this.userrepo); // Store user repos in local storage
+
+
+        this.apiService.getUserRepo(this.user, this.currentPage, this.itemsPerPage)
+          .subscribe((data: UserRepo[] | any) => {
+            this.userrepo1 = data;
+            this.storeData('userRepo1', this.userrepo1);
+
+
+            // Fetch languages for each repository
+            this.userrepo1.forEach((repo: any) => {
+              this.apiService.getLanguagesForRepo(repo.languages_url)
+                .subscribe((languagesData: any) => {
+                  repo.languages = languagesData;
+                  
+                  this.storeData(`languages_${repo.name}`, repo.languages); // Store languages for each repo in local storage
+                });
+            });
+
+
+
+
+          });
+
+
         // Calculate total pages
         this.calculateTotalPages(this.userrepo.length, this.itemsPerPage);
-        console.log('lengthofpages:',data.length);
-        // Fetch languages for each repository
-        this.userrepo.forEach((repo: any) => {
-          this.apiService.getLanguagesForRepo(repo.languages_url)
-            .subscribe((languagesData: any) => {
-              repo.languages = languagesData;
-              console.log('Languages for', repo.name, ':', repo.languages);
-              this.storeData(`languages_${repo.name}`, repo.languages); // Store languages for each repo in local storage
-            });
-        });
+
+
+
+
+
       });
   }
 
 
   prevPage() {
-    console.log('Current Page:', this.currentPage);
-    console.log('Total Pages:', this.totalPages.length);
+    
     if (this.currentPage > 1) {
       this.currentPage--;
       this.fetchUserRepos();
     }
   }
-  
+
   nextPage() {
-    console.log('Current Page:', this.currentPage);
-    console.log('Total Pages:', this.totalPages.length);
+    
+    
     if (this.currentPage < this.totalPages.length) {
       this.currentPage++;
       this.fetchUserRepos();
     }
   }
-  
+
 
   storeData(key: string, data: any) {
     localStorage.setItem(key, JSON.stringify(data));
