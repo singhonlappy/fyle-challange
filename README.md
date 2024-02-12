@@ -11,7 +11,10 @@ NPM package manager has been used
 
 
 # This SPA is made using Angular and Tailwind CSS and all the files are public on github , further it has been build using VS CODE and deployed on the GitHub Pages . Mentioned below are links of the Repo and Spa deployed verison. 
-link :  https://github.com/singhonlappy/fyle-challange.git
+Link of Repository :  https://github.com/singhonlappy/fyle-challange.git
+
+Online link   :       https://singhonlappy.github.io/fyle-challange/
+
 
 
 
